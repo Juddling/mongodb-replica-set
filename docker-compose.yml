@@ -1,11 +1,23 @@
 version: '3.1'
 services:
+  mongo:
+    image:
+      mongo
+    command: --replSet 'rs0'
+    ports:
+      - 27017:27017
+    hostname: mongo.primary
+    deploy:
+      resources:
+        limits:
+          memory: 1G
   mongo_secondary_a:
     image:
       mongo
-    command: --replSet rs0
+    command: --replSet 'rs0'
     ports:
       - 27019:27017
+    hostname: mongo.secondary.1
     deploy:
       resources:
         limits:
@@ -13,20 +25,11 @@ services:
   mongo_secondary_b:
     image:
       mongo
-    command: --replSet rs0
+    command: --replSet 'rs0'
     ports:
       - 27018:27017
+    hostname: mongo.secondary.2
     deploy:
       resources:
         limits:
           memory: 512M
-  mongo:
-    image:
-      mongo
-    command: --replSet rs0
-    ports:
-      - 27017:27017
-    deploy:
-      resources:
-        limits:
-          memory: 1G

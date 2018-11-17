@@ -23,3 +23,44 @@ https://github.com/docker/compose/pull/5684
 ```
 docker-compose --compatibility up
 ```
+
+## Configure replication:
+
+Connect to the primary node:
+
+```
+> rsconf = {
+  _id: "rs0",
+  members: [
+    {
+     _id: 0,
+     host: "mongo.primary:27017"
+    },
+    {
+     _id: 1,
+     host: "mongo.secondary.1:27017"
+    },
+    {
+     _id: 2,
+     host: "mongo.secondary.2:27017"
+    }
+   ]
+};
+> rs.initiate(rsconf)
+```
+
+Insert a document:
+
+```
+> db.hack.insertOne({needCoffee: true})
+```
+
+
+See the data on a secondary:
+
+```
+mongo --port 27018
+
+> db.setSlaveOk()
+> db.hack.find({})
+```
